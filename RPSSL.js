@@ -1,4 +1,3 @@
-// Stores the current player's and computer's choices
 // 0 = Rock, 1 = Paper, 2 = Scissors
 var playerChoice;
 var computerChoice;
@@ -6,24 +5,21 @@ var computerChoice;
 // Stores the lables for the choices
 var choices = ["Rock", "Paper", "Scissors", "Spock", "Lizard"];
 
-// Variable to store the score
 // score[0] = wins, score[1] = ties, score[2] = losses
 var score = [0, 0, 0];
+var match = [0, 0];
 
-// Stores the player's choice, then call's the function for storing the computer's choice
 function storePlayerChoice(choice) {
     playerChoice = choice;
     console.log("My choice = " + choice);
     storeComputerChoice();
 }
 
-// Generate computer's random choice
 function storeComputerChoice() {
     computerChoice = Math.floor(Math.random() * 5);
     console.log("Computer choice = " + computerChoice);
 }
 
-// This is the function for playing the game
 function playGame() {
     if (playerChoice != null) {
         if (playerChoice == computerChoice) {
@@ -54,19 +50,14 @@ function playGame() {
 
 function displayGameResult(result) {
     // Define an array of text labels for the choices 0, 1, 2;
-    // Create a message for the player
     var message = "Your choice was " + choices[playerChoice] + " and the computer's choice was " + choices[computerChoice] + ".";
-    // Add to the base message if it was a win, loss, or tie
     if (result === "win") {
-        // Display that it was a win
         document.getElementById("result").textContent = message + " YOU WIN!";
         document.getElementById("result").className = "alert alert-success";
     } else if (result === "lose") {
-        // Display that it was a loss
         document.getElementById("result").textContent = message + " YOU LOSE!";
         document.getElementById("result").className = "alert alert-danger";
     } else {
-        // Display that it was a tie
         document.getElementById("result").textContent = message + " A tie.";
         document.getElementById("result").className = "alert alert-info";
     }
@@ -80,14 +71,26 @@ function updateScore(val) {
     console.log("The score is now " + score);
 }
 
-// Function for displaying the score
+function updateMatch(val) {
+    ++match[val];
+    console.log("The match score is now " + match)
+}
+
+function updateMatchBoard() {
+    if (document.getElementById("wins").valueOf = 2) {
+        document.getElementById("wins2").valueOf = match[0]++;
+    } else {
+        document.getElementById("losses2").valueOf = match[1]++;
+    }
+}
+
 function updateScoreBoard() {
     document.getElementById("wins").textContent = score[0];
     document.getElementById("losses").textContent = score[2];
     document.getElementById("ties").textContent = score[1];
 }
 
-// The button elements
+
 var rockButton = document.getElementById("rock");
 var paperButton = document.getElementById("paper");
 var scissorsButton = document.getElementById("scissors");
@@ -95,7 +98,6 @@ var spockButton = document.getElementById("spock");
 var lizardButton = document.getElementById("lizard");
 var playButton = document.getElementById("play");
 
-// Add the event handlers
 rockButton.addEventListener('click', () => {
     storePlayerChoice(0)
 });
