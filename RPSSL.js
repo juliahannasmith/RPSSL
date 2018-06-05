@@ -27,21 +27,27 @@ function playGame() {
             displayGameResult("tie")
         } else if (playerChoice == 0 && (computerChoice == 2 || computerChoice == 4)) {
             updateScore(0);
+            updateMatch();
             displayGameResult("win")
         } else if (playerChoice == 1 && (computerChoice == 0 || computerChoice == 3)) {
             updateScore(0);
+            updateMatch();
             displayGameResult("win")
         } else if (playerChoice == 2 && (computerChoice == 1 || computerChoice == 4)) {
             updateScore(0);
+            updateMatch();
             displayGameResult("win")
         } else if (playerChoice == 3 && (computerChoice == 0 || computerChoice == 2)) {
             updateScore(0);
+            updateMatch();
             displayGameResult("win")
         } else if (playerChoice == 4 && (computerChoice == 1 || computerChoice == 3)) {
             updateScore(0);
+            updateMatch();
             displayGameResult("win")
         } else {
             updateScore(2);
+            updateMatch();
             displayGameResult("lose")
         }
     }
@@ -72,16 +78,24 @@ function updateScore(val) {
 }
 
 function updateMatch(val) {
-    ++match[val];
-    console.log("The match score is now " + match)
+    if (score[0] == 2) {
+        ++match[0];
+        score[0] = 0;
+        score[1] = 0;
+        score[2] = 0;
+        updateMatchBoard();
+    } else if (score[2] == 2) {
+        ++match[1];
+        score[0] = 0;
+        score[1] = 0;
+        score[2] = 0;
+        updateMatchBoard();
+    }
 }
 
 function updateMatchBoard() {
-    if (document.getElementById("wins").valueOf = 2) {
-        document.getElementById("wins2").valueOf = match[0]++;
-    } else {
-        document.getElementById("losses2").valueOf = match[1]++;
-    }
+    document.getElementById("wins2").textContent = match[0];
+    document.getElementById("losses2").textContent = match[1];
 }
 
 function updateScoreBoard() {
