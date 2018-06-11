@@ -1,62 +1,92 @@
-// 0 = Rock, 1 = Paper, 2 = Scissors
-var playerChoice;
-var computerChoice;
+var RPSSL = {
 
-// Stores the lables for the choices
-var choices = ["Rock", "Paper", "Scissors", "Spock", "Lizard"];
+    choices: {
+        ROCK: 0,
+        PAPER: 1,
+        SCISSORS: 2,
+        SPOCK: 3,
+        LIZARD: 4
+    },
 
-// score[0] = wins, score[1] = ties, score[2] = losses
-var score = [0, 0, 0];
-var match = [0, 0];
+    score: {
+        wins: 0,
+        lossos: 0,
+        ties: 0
+    },
 
-function storePlayerChoice(choice) {
-    playerChoice = choice;
-    console.log("My choice = " + choice);
-    storeComputerChoice();
+    match: {
+        WINS: 0,
+        LOSSES: 0
+    },
+
+    player: new Player(),
+
+    computer: new Player(),
+
+    rockButton: document.getElementById("rock"),
+    paperButton: document.getElementById("paper"),
+    scissorsButton: document.getElementById("scissors"),
+    spockButton: document.getElementById("spock"),
+    lizardButton: document.getElementById("lizard"),
+    playButton: document.getElementById("play"),
+
+    storePlayerChoice: function (choice) {
+        this.player.choice = choice;
+        this.storeComputerChoice();
+    },
+
+    storeComputerChoice: function () {
+        this.computer.choice = Math.floor(Math.random() * 5);
+    },
+
+    Player: function () {
+        this.choice = null;
+    }
 }
 
+
 function storeComputerChoice() {
-    computerChoice = Math.floor(Math.random() * 5);
-    console.log("Computer choice = " + computerChoice);
+    computer.choice = Math.floor(Math.random() * 5);
+    console.log("Computer choice = " + computer.choice);
 }
 
 function playGame() {
-    if (playerChoice != null) {
-        if (playerChoice == computerChoice) {
-            updateScore(1);
+    if (player.choice != null) {
+        if (player.choice == computer.choice) {
+            ++score.ties
             displayGameResult("tie")
-        } else if (playerChoice == 0 && (computerChoice == 2 || computerChoice == 4)) {
-            updateScore(0);
+        } else if (RPSSL.player.choice == RPSSL.choices.ROCK && (RPSSL.computer.choice == RPSSL.choices.SCISSORS || RPSSL.computer.choice == RPSSL.choices.LIZARD)) {
+            ++score.wins
             updateMatch();
             displayGameResult("win")
-        } else if (playerChoice == 1 && (computerChoice == 0 || computerChoice == 3)) {
-            updateScore(0);
+        } else if (RPSSL.player.choice == RPSSL.choices.PAPER && (RPSSL.computer.choice == RPSSL.choices.ROCK || RPSSL.computer.choice == RPSSL.choices.SPOCK)) {
+            ++score.wins
             updateMatch();
             displayGameResult("win")
-        } else if (playerChoice == 2 && (computerChoice == 1 || computerChoice == 4)) {
-            updateScore(0);
+        } else if (RPSSL.player.choice == RPSSL.choices.SCISSORS && (RPSSL.computer.choice == RPSSL.choices.PAPER || RPSSL.computer.choice == RPSSL.choices.LIZARD)) {
+            ++score.wins
             updateMatch();
             displayGameResult("win")
-        } else if (playerChoice == 3 && (computerChoice == 0 || computerChoice == 2)) {
-            updateScore(0);
+        } else if (RPSSL.player.choice == RPSSL.choices.SPOCK && (RPSSL.computer.choice == RPSSL.choices.ROCK || RPSSL.computer.choice == RPSSL.choises.SCISSORS)) {
+            ++score.wins
             updateMatch();
             displayGameResult("win")
-        } else if (playerChoice == 4 && (computerChoice == 1 || computerChoice == 3)) {
-            updateScore(0);
+        } else if (RPSSL.player.choice == RPSSL.choices.LIZARD && (RPSSL.computer.choice == RPSSL.choises.PAPER || RPSSL.computer.choice == RPSSL.choices.SPOCK)) {
+            ++score.wins
             updateMatch();
             displayGameResult("win")
         } else {
-            updateScore(2);
+            ++score.losses
             updateMatch();
             displayGameResult("lose")
         }
     }
-    playerChoice = null;
+    player.choice = null;
 }
 
 function displayGameResult(result) {
     // Define an array of text labels for the choices 0, 1, 2;
-    var message = "Your choice was " + choices[playerChoice] + " and the computer's choice was " + choices[computerChoice] + ".";
+    var message = "Your choice was " + RPSSL.player.choice + " and the computer's choice was " + RPSSL.computer.choice + ".";
     if (result === "win") {
         document.getElementById("result").textContent = message + " YOU WIN!";
         document.getElementById("result").className = "alert alert-success";
@@ -71,62 +101,53 @@ function displayGameResult(result) {
     updateScoreBoard();
 }
 
-// Updates the score
-function updateScore(val) {
-    ++score[val];
-    console.log("The score is now " + score);
-}
 
-function updateMatch(val) {
-    if (score[0] == 2) {
-        ++match[0];
-        score[0] = 0;
-        score[1] = 0;
-        score[2] = 0;
+
+function updateMatch() {
+    if (score.wins == 2) {
+        ++match.WINS;
+        score.wins = 0;
+        score.losses = 0;
+        score.ties = 0;
         updateMatchBoard();
-    } else if (score[2] == 2) {
-        ++match[1];
-        score[0] = 0;
-        score[1] = 0;
-        score[2] = 0;
+    } else if (score.losses == 2) {
+        ++match.LOSSES;
+        score.wins = 0;
+        score.losses = 0;
+        score.ties = 0;
         updateMatchBoard();
     }
 }
 
 function updateMatchBoard() {
-    document.getElementById("wins2").textContent = match[0];
-    document.getElementById("losses2").textContent = match[1];
+    document.getElementById("wins2").textContent = match.WINS;
+    document.getElementById("losses2").textContent = match.LOSSES;
 }
 
 function updateScoreBoard() {
-    document.getElementById("wins").textContent = score[0];
-    document.getElementById("losses").textContent = score[2];
-    document.getElementById("ties").textContent = score[1];
+    document.getElementById("wins").textContent = score.wins;
+    document.getElementById("losses").textContent = score.losses;
+    document.getElementById("ties").textContent = score.ties;
 }
 
 
-var rockButton = document.getElementById("rock");
-var paperButton = document.getElementById("paper");
-var scissorsButton = document.getElementById("scissors");
-var spockButton = document.getElementById("spock");
-var lizardButton = document.getElementById("lizard");
-var playButton = document.getElementById("play");
 
-rockButton.addEventListener('click', () => {
+
+RPSSL.rockButton.addEventListener('click', () => {
     storePlayerChoice(0)
 });
-paperButton.addEventListener('click', () => {
+RPSSL.paperButton.addEventListener('click', () => {
     storePlayerChoice(1)
 });
-scissorsButton.addEventListener('click', () => {
+RPSSL.scissorsButton.addEventListener('click', () => {
     storePlayerChoice(2)
 });
-spockButton.addEventListener('click', () => {
+RPSSL.spockButton.addEventListener('click', () => {
     storePlayerChoice(3)
 });
-lizardButton.addEventListener('click', () => {
+RPSSL.lizardButton.addEventListener('click', () => {
     storePlayerChoice(4)
 });
-playButton.addEventListener('click', () => {
+RPSSL.playButton.addEventListener('click', () => {
     playGame()
 });
