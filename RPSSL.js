@@ -5,23 +5,27 @@ var RPSSL = {
         PAPER: 1,
         SCISSORS: 2,
         SPOCK: 3,
-        LIZARD: 4
+        LIZARD: 4,
     },
 
     score: {
         wins: 0,
         lossos: 0,
-        ties: 0
+        ties: 0,
     },
 
     match: {
         WINS: 0,
-        LOSSES: 0
+        LOSSES: 0,
     },
 
-    player: new Player(),
+    Player: function() {
+        this.choice = null;
+    },
 
-    computer: new Player(),
+    //player: new RPSSL.Player(),
+
+    //computer: new RPSSL.Player(),
 
     rockButton: document.getElementById("rock"),
     paperButton: document.getElementById("paper"),
@@ -41,113 +45,110 @@ var RPSSL = {
 
     Player: function () {
         this.choice = null;
-    }
-}
+    },
+
+    storeComputerChoice: function () {
+        this.computer.choice = Math.floor(Math.random() * 5);
+    },
 
 
-function storeComputerChoice() {
-    computer.choice = Math.floor(Math.random() * 5);
-    console.log("Computer choice = " + computer.choice);
-}
-
-function playGame() {
-    if (player.choice != null) {
-        if (player.choice == computer.choice) {
-            ++score.ties
-            displayGameResult("tie")
-        } else if (RPSSL.player.choice == RPSSL.choices.ROCK && (RPSSL.computer.choice == RPSSL.choices.SCISSORS || RPSSL.computer.choice == RPSSL.choices.LIZARD)) {
-            ++score.wins
-            updateMatch();
-            displayGameResult("win")
-        } else if (RPSSL.player.choice == RPSSL.choices.PAPER && (RPSSL.computer.choice == RPSSL.choices.ROCK || RPSSL.computer.choice == RPSSL.choices.SPOCK)) {
-            ++score.wins
-            updateMatch();
-            displayGameResult("win")
-        } else if (RPSSL.player.choice == RPSSL.choices.SCISSORS && (RPSSL.computer.choice == RPSSL.choices.PAPER || RPSSL.computer.choice == RPSSL.choices.LIZARD)) {
-            ++score.wins
-            updateMatch();
-            displayGameResult("win")
-        } else if (RPSSL.player.choice == RPSSL.choices.SPOCK && (RPSSL.computer.choice == RPSSL.choices.ROCK || RPSSL.computer.choice == RPSSL.choises.SCISSORS)) {
-            ++score.wins
-            updateMatch();
-            displayGameResult("win")
-        } else if (RPSSL.player.choice == RPSSL.choices.LIZARD && (RPSSL.computer.choice == RPSSL.choises.PAPER || RPSSL.computer.choice == RPSSL.choices.SPOCK)) {
-            ++score.wins
-            updateMatch();
-            displayGameResult("win")
-        } else {
-            ++score.losses
-            updateMatch();
-            displayGameResult("lose")
+    playGame: function () {
+        if (player.choice != null) {
+            if (player.choice == computer.choice) {
+                ++RPSSL.score.ties
+                RPSSL.displayGameResult("tie")
+            } else if (RPSSL.player.choice == RPSSL.choices.ROCK && (RPSSL.computer.choice == RPSSL.choices.SCISSORS || RPSSL.computer.choice == RPSSL.choices.LIZARD)) {
+                ++RPSSL.score.wins
+                RPSSL.updateMatch();
+                RPSSL.displayGameResult("win")
+            } else if (RPSSL.player.choice == RPSSL.choices.PAPER && (RPSSL.computer.choice == RPSSL.choices.ROCK || RPSSL.computer.choice == RPSSL.choices.SPOCK)) {
+                ++RPSSL.score.wins
+                RPSSL.updateMatch();
+                RPSSL.displayGameResult("win")
+            } else if (RPSSL.player.choice == RPSSL.choices.SCISSORS && (RPSSL.computer.choice == RPSSL.choices.PAPER || RPSSL.computer.choice == RPSSL.choices.LIZARD)) {
+                ++RPSSL.score.wins
+                RPSSL.updateMatch();
+                RPSSL.displayGameResult("win")
+            } else if (RPSSL.player.choice == RPSSL.choices.SPOCK && (RPSSL.computer.choice == RPSSL.choices.ROCK || RPSSL.computer.choice == RPSSL.choises.SCISSORS)) {
+                ++RPSSL.score.wins
+                RPSSL.updateMatch();
+                RPSSL.displayGameResult("win")
+            } else if (RPSSL.player.choice == RPSSL.choices.LIZARD && (RPSSL.computer.choice == RPSSL.choises.PAPER || RPSSL.computer.choice == RPSSL.choices.SPOCK)) {
+                ++RPSSL.score.wins
+                RPSSL.updateMatch();
+                RPSSL.displayGameResult("win")
+            } else {
+                ++RPSSL.score.losses
+                RPSSL.updateMatch();
+                RPSSL.displayGameResult("lose")
+            }
         }
-    }
-    player.choice = null;
+        RPSSL.player.choice = null;
+    },
+
+    displayGameResult: function () {
+        // Define an array of text labels for the choices 0, 1, 2;
+        var message = "Your choice was " + RPSSL.player.choice + " and the computer's choice was " + RPSSL.computer.choice + ".";
+        if (result === "win") {
+            document.getElementById("result").textContent = message + " YOU WIN!";
+            document.getElementById("result").className = "alert alert-success";
+        } else if (result === "lose") {
+            document.getElementById("result").textContent = message + " YOU LOSE!";
+            document.getElementById("result").className = "alert alert-danger";
+        } else {
+            document.getElementById("result").textContent = message + " A tie.";
+            document.getElementById("result").className = "alert alert-info";
+        }
+
+        RPSSL.updateScoreBoard();
+    },
+
+    updateMatch: function () {
+        if (RPSSL.score.wins == 2) {
+            ++RPSSL.match.WINS;
+            RPSSL.score.wins = 0;
+            RPSSL.score.losses = 0;
+            RPSSL.score.ties = 0;
+            RPSSL.updateMatchBoard();
+        } else if (RPSSL.score.losses == 2) {
+            ++RPSSL.match.LOSSES;
+            RPSSL.score.wins = 0;
+            RPSSL.score.losses = 0;
+            RPSSL.score.ties = 0;
+            RPSSL.updateMatchBoard();
+        }
+    },
+
+    updateMatchBoard: function () {
+        document.getElementById("wins2").textContent = RPSSL.match.WINS;
+        document.getElementById("losses2").textContent = RPSSL.match.LOSSES;
+    },
+
+    updateScoreBoard: function () {
+        document.getElementById("wins").textContent = RPSSL.score.wins;
+        document.getElementById("losses").textContent = RPSSL.score.losses;
+        document.getElementById("ties").textContent = RPSSL.score.ties;
+    },
+
 }
-
-function displayGameResult(result) {
-    // Define an array of text labels for the choices 0, 1, 2;
-    var message = "Your choice was " + RPSSL.player.choice + " and the computer's choice was " + RPSSL.computer.choice + ".";
-    if (result === "win") {
-        document.getElementById("result").textContent = message + " YOU WIN!";
-        document.getElementById("result").className = "alert alert-success";
-    } else if (result === "lose") {
-        document.getElementById("result").textContent = message + " YOU LOSE!";
-        document.getElementById("result").className = "alert alert-danger";
-    } else {
-        document.getElementById("result").textContent = message + " A tie.";
-        document.getElementById("result").className = "alert alert-info";
-    }
-
-    updateScoreBoard();
-}
-
-
-
-function updateMatch() {
-    if (score.wins == 2) {
-        ++match.WINS;
-        score.wins = 0;
-        score.losses = 0;
-        score.ties = 0;
-        updateMatchBoard();
-    } else if (score.losses == 2) {
-        ++match.LOSSES;
-        score.wins = 0;
-        score.losses = 0;
-        score.ties = 0;
-        updateMatchBoard();
-    }
-}
-
-function updateMatchBoard() {
-    document.getElementById("wins2").textContent = match.WINS;
-    document.getElementById("losses2").textContent = match.LOSSES;
-}
-
-function updateScoreBoard() {
-    document.getElementById("wins").textContent = score.wins;
-    document.getElementById("losses").textContent = score.losses;
-    document.getElementById("ties").textContent = score.ties;
-}
-
 
 
 
 RPSSL.rockButton.addEventListener('click', () => {
-    storePlayerChoice(0)
+    RPSSL.storePlayerChoice(0)
 });
 RPSSL.paperButton.addEventListener('click', () => {
-    storePlayerChoice(1)
+    RPSSL.storePlayerChoice(1)
 });
 RPSSL.scissorsButton.addEventListener('click', () => {
-    storePlayerChoice(2)
+    RPSSL.storePlayerChoice(2)
 });
 RPSSL.spockButton.addEventListener('click', () => {
-    storePlayerChoice(3)
+    RPSSL.storePlayerChoice(3)
 });
 RPSSL.lizardButton.addEventListener('click', () => {
-    storePlayerChoice(4)
+    RPSSL.storePlayerChoice(4)
 });
 RPSSL.playButton.addEventListener('click', () => {
-    playGame()
+    RPSSL.playGame()
 });
